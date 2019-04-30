@@ -38,7 +38,9 @@
       .red {
           color: #fa0000;
       }
-      .remark-code, .remark-inline-code { font-family: 'IBM Plex Mono'; }
+      .remark-code, .remark-inline-code {
+          font-family: 'IBM Plex Mono';
+        font-size: 0.7em; }
   </style>
 </head>
 <body>
@@ -57,7 +59,7 @@ class: center, middle
 ---
 
 # the pipeline
-## in GitLab CE
+## CI/CD in GitLab (CE)
 ### an overview by Stefan G. Weichinger
 
 at #LWW19 LinuxWochenWien 2019
@@ -71,15 +73,17 @@ at #LWW19 LinuxWochenWien 2019
   1. What is GitLab?
   1. Community or Enterprise?
   1. Installation options
-1. Setup GitLab environment
+1. GitLab environment
   1. Overview
   1. the Server
   1. the Runner
-1. Setup a project
+1. Setup a project with CI/CD
   1. Create the project in gitlab
   1. Enable CI
-1. Run your Docker image
-1. Build versioned releases
+  1. Run your Docker image
+1. GitLab CI/CD "for runaways"
+  1. Build versioned releases
+  1. best practises
 ---
 .head[
   # About GitLab
@@ -320,13 +324,16 @@ $ git push --tags
 
 Check the build and registry within GitLab.
 ---
-.head[
-  # that was the easy part
+class: center, middle, inverse
+ # that was the easy part
 ]
-
+---
+.head[
+  ### ... for runaways
+]
 # what else can we do?
 
-* GitLab docker registry: push/pull generated images and 
+* GitLab docker registry: push/pull generated images
 * CD: deploy to staging and production, locally or remote
 * environments: integrated way of grouping test and prod instances within the GUI
 
@@ -426,13 +433,14 @@ docker build\
 
 ---
 .head[
-  # for runaways
+  ### ... for runaways
 ]
 
 ## yaml templates
 
-The .gitlab-ci.yml grows fast and gets complex rather soon.
-To avoid repeating blocks you may use yaml templates, for example
+`.gitlab-ci.yml` grows fast and gets complex rather soon.
+
+To avoid repeating blocks you may use yaml templates, for example:
 
 "deploy to production" and "deploy to staging" might only differ in small parts
 
@@ -443,6 +451,21 @@ docker build\
   --tag $CONTAINER_IMAGE:latest\
   .
 ```
+---
+.head[
+  ### ... for runaways
+]
+
+## environments
+
+Environments are like tags for your CI jobs, describing where code gets deployed.
+
+Deployments are created when jobs deploy versions of code to environments, so every environment can have one or more deployments.
+GitLab:
+
+GitLab provides a full history of your deployments for each environment.
+
+GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers
 
 ---
 
