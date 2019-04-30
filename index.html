@@ -41,6 +41,22 @@
       .remark-code, .remark-inline-code {
           font-family: 'IBM Plex Mono';
         font-size: 0.7em; }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
   </style>
 </head>
 <body>
@@ -312,6 +328,8 @@ http://gitlab:3000
 ]
 If we want to build images for release we could use a second build job:
 
+TODO HERE
+
 ```yaml
 build_release:
   only:
@@ -335,10 +353,13 @@ Check the build and registry within GitLab.
 class: center, middle, inverse
  # that was the easy part
 ---
-.head[
-  ### ... for runaways
+<!--layout: false-->
+.left-column[
+### ... for the runaways
 ]
-# what else can we do?
+
+.right-column[
+some other things:
 
 - you will need routing and SSL/TLS ... something like [traefik](#traefik)
 --
@@ -346,20 +367,22 @@ class: center, middle, inverse
 - GitLab docker registry: push/pull generated images
 --
 
-- CD: deploy to staging and production -> [environments](#environments)
+- CD: deploy to staging and production : use [environments](#environments)
 --
 
 - speed up things with [caching](#caching)
 --
-
----
-.head[
-  # best practises
 ]
 
-## use variables = avoid hardcoding
+---
+.left-column[
+  ### best practises
+  #### use variables = avoid hardcoding
+]
 
-gl offers variables for nearly(?) everything
+
+.right-column[
+GitLab offers variables for nearly(?) everything
 
 ```example
 export CI_JOB_TOKEN="abcde-1234ABCD5678ef"
@@ -371,13 +394,14 @@ export CI_REGISTRY="registry.example.com"
 before_script:
   - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
 ```
-
+]
 ---
-.head[
-  # best practises
+.left-column[
+  ### best practises
+  #### use variables = avoid hardcoding
 ]
 
-## use variables = avoid hardcoding
+.right-column[
 
 for example for tagging the docker images:
 
@@ -401,15 +425,15 @@ export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
     # And we push it.
     - docker push $CI_REGISTRY_IMAGE:latest
 ```
-
+]
 ---
 name: caching
-.head[
-  # best practises
+.left-column[
+  ## best practises
+  ### use caches
 ]
 
-## use caches
-
+.right-column[
 You can define which paths you want to cache for the next stage(s):
 
 ```code
@@ -423,14 +447,15 @@ example-job:
 ```
 
 For bigger environments you can run a separate cache server and share cache between multiple runners.
-
----
-.head[
-  # best practises
 ]
 
-### use small docker images ... and cache them
+---
+.left-column[
+  ## best practises
+  ### use small docker images ... and cache them
+]
 
+.right-column[
 instead of rebuilding everytime from scratch
 
 ```code
@@ -446,20 +471,23 @@ docker build\
   --tag $CONTAINER_IMAGE:latest\
   .
 ```
+]
 
 ---
 name: yaml_templates
-.head[
-  ### ... for runaways
+.left-column[
+  ## best practises
+  ### yaml templates
 ]
 
-## yaml templates
-
+.right-column[
 `.gitlab-ci.yml` grows fast and gets complex rather soon.
 
 To avoid repeating blocks you may use yaml templates, for example:
 
 "deploy to production" and "deploy to staging" might only differ in small parts
+
+TODO HERE
 
 ```code
 docker build\
@@ -468,21 +496,23 @@ docker build\
   --tag $CONTAINER_IMAGE:latest\
   .
 ```
+]
 ---
 name: environments
-.head[
-  ### ... for runaways
+.left-column[
+  ## best practises
+  ### environments
 ]
 
-## environments
-
-Environments are like tags for your CI jobs, describing where code gets deployed.
+.right-column[
+*Environments* are like tags for your CI jobs, describing where code gets deployed.
 
 Deployments are created when jobs deploy versions of code to environments, so every environment can have one or more deployments.
 
 GitLab provides a full history of your deployments for each environment.
 
-GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers
+GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers.
+]
 
 ---
 name: demo
