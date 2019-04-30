@@ -11,7 +11,11 @@
       h1, h2, h3 {
           font-family: 'Lobster';
           font-weight: normal;
+          margin-bottom: 0;
       }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
       a {
           background-color: #fafa00;
           color: #000;
@@ -31,12 +35,60 @@
       vertical-align: middle;
       text-align: left;
       }
-      .inverse .remark-slide-number {
-          display: none;
+.inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
       }
 
-      .red {
-          color: #fa0000;
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
       }
       .remark-code, .remark-inline-code {
           font-family: 'IBM Plex Mono';
@@ -45,7 +97,7 @@
       /* Two-column layout */
       .left-column {
         color: #777;
-        width: 20%;
+        width: 15%;
         height: 92%;
         float: left;
       }
@@ -53,7 +105,7 @@
           color: #000;
         }
       .right-column {
-        width: 75%;
+        width: 80%;
         float: right;
         padding-top: 1em;
       }
@@ -103,10 +155,11 @@ at #LWW19 LinuxWochenWien 2019
 1. optional demo
 
 ---
-.head[
+.left-column[
   # About GitLab
   ## What is GitLab?
 ]
+.right-column[
 GitLab is an open source end-to-end software development platform with
 
 - built-in version control
@@ -122,34 +175,42 @@ GitLab is an open source end-to-end software development platform with
 --
 
 - ... and much more.
+]
 
 ---
-.head[
+.left-column[
   # About GitLab
   ## Community or Enterprise?
 ]
 
+.right-column[
 There's a Community Edition (CE) and a Enterprise Edition (EE).
 The EE has some extra features, but the CE is already very complete.
 
-Development of both versions is done in the public.
----
-.head[
-  ## About GitLab
+Development of both versions is done in the public:
 
-  ### use it at https://gitlab.com (and pay for it)
-  ### or look for a hoster
-  ### or install it on your own systems
+https://gitlab.com/gitlab-org/gitlab-ce/
+
 ]
+---
+.left-column[
+  # About GitLab
+  ## How?
+]
+.right-column[
 
- * Packages for common Linux distributions.
- * Docker images ... for GitLab CE and for the GitLab Runner.
+- use it at https://gitlab.com (and pay for it)
+- or look for a hoster
+- or install it on your own systems:
+
+    - Packages for common Linux distributions.
+    - Docker images ... for GitLab CE and for the GitLab Runner.
 
 Basically you might run both the server and the runner on your laptop.red[*]
 
 .footnote[.red[*] ... a bit tricky, though ... DNS etc
 ]
-
+]
 ---
 .head[
   # GitLab environment
