@@ -592,29 +592,30 @@ CI builds docker image, pushes to project repo
 
 ---
 
-# Thanks
+# Thanks!
 
 For more information please contact:
 
 Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a>&gt;
 
-# @stefangw
+# `@stefangw`
 
 - expert
 - linux servers since the early 90s
 - giving talks, writing for magazines, books ...
-- always looking for paid work
+- always looking for well-paid work
 
 .bg[ ![Buster JS](https://www.oops.co.at/css/img/oops-logo.gif) ]
 
 ---
 class: center, middle, inverse
 
-one last thing
+one last thing ...
 
 ---
 class: center, middle, inverse
 # please vote
+## European elections on May, 26th :: important!
 
 ---
 
@@ -636,13 +637,24 @@ for the [LWW19 - LinuxWochenWien](https://linuxwochen.at)
 ### links
 
  * consult your local search engine ... hundreds of articles and howtos ...
+---
+name: last-page
+class: center, middle, inverse
 
+## That's all, folks!
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
-    </script>
     <script>
-      var slideshow = remark.create();
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark.language.js"></script>
+    <script>
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark',
+          highlightLines: true
+        }) ;
     </script>
   </body>
 </html>
