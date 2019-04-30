@@ -91,15 +91,21 @@ at #LWW19 LinuxWochenWien 2019
   # About GitLab
   ## What is GitLab?
 ]
-GitLab is:
+GitLab is an open source end-to-end software development platform with
 
-GitLab is an open source end-to-end software development platform with 
+- built-in version control
+--
 
- * built-in version control
- * issue tracking
- * code review
- * CI/CD
- * ... and more.
+- issue tracking
+--
+
+- code review
+--
+
+- CI/CD
+--
+
+- ... and much more.
 
 ---
 .head[
@@ -113,14 +119,20 @@ The EE has some extra features, but the CE is already very complete.
 Development of both versions is done in the public.
 ---
 .head[
-  # About GitLab
-  ## Installation options
+  ## About GitLab
+
+  ### use it at https://gitlab.com (and pay for it)
+  ### or look for a hoster
+  ### or install it on your own systems
 ]
 
  * Packages for common Linux distributions.
  * Docker images ... for GitLab CE and for the GitLab Runner.
 
- Basically you might run both the server and the runner on your laptop!
+Basically you might run both the server and the runner on your laptop.red[*]
+
+.footnote[.red[*] ... a bit tricky, though ... DNS etc
+]
 
 ---
 .head[
@@ -154,8 +166,12 @@ sudo docker run --detach \
 or google for a nice docker-compose.yml ...
 
 ---
+name: runner
+class: center, middle
+# If you don't need CI/CD ... you are done!
+---
 .head[
-  ## GitLab environment :: the Runner
+  ## GitLab CI/CD :: the Runner
 ]
 
 ### What?
@@ -171,12 +187,15 @@ a docker container or even a cluster of containers.
 ### Where?
 A runner might be set up to be specific for certain projects, groups or tags.
 
-For example you could have specific "docker runners".
-
 In general you deploy the runner(s) separated from the GitLab server itself:
 High load tasks are separated from the GitLab GUI and logic ... performance high
 
 Runners fetch their jobs and deliver results and (optional) artefacts.
+
+???
+
+runners are separate workhorses
+http API between gitlab server and runners
 
 ---
 .head[
@@ -478,7 +497,7 @@ demo repository at gitlab.com : [hello-world](https://gitlab.com/stefangweiching
 small python script
 CI builds docker image, pushes to project repo
 
-
+2 environments
 
 ---
 
