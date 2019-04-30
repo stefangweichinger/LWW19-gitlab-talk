@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>the pipeline</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="layout.css" rel="stylesheet"> 
+  </head>
+  <body>
+    <textarea id="source">
+class: inverse
+
+# the pipeline
+## how to use CI/CD in Gitlab CE
+### an overview by Stefan G. Weichinger
+
+at #LWW19 LinuxWochenWien 2019
+
+.created-on[2019-05-02]
+---
+.head[
+  # Agenda
+]
+1. About Gitlab
+  1. What is Gitlab?
+  1. Community of Enterprise?
+  1. Installation options
+1. Setup Gitlab environment
+  1. Overview
+  1. Starting it up
+  1. Setting up the Gitlab server
+  1. Setting up the Runner
+1. Setup your personal user account
+1. Setup a project
+  1. Create the project in gitlab
+  1. Add a build job to the CI
+1. Run your Docker image
+1. Build versioned releases
+---
+.head[
+  # About Gitlab
+  ## What is Gitlab?
+]
+Gitlab is:
+
+GitLab Community Edition (CE) 
+is an open source end-to-end software development platform with 
+
+ * built-in version control
+ * issue tracking
+ * code review
+ * CI/CD
+ * ... and more.
+ 
+ Self-host GitLab CE on your own servers, in a container, or on a cloud provider.
+
+---
+.head[
+  # About Gitlab
+  ## Community or Enterprise?
+]
+There's a Community Edition (CE) and a Enterprise Edition (EE).
+
+The EE has some extra features, but the CE is already very complete.
+
+Development of both versions is done in the public.
+---
+.head[
+  # About Gitlab
+  ## Installation options
+]
+There are prebuilt packages for:
+ * Ubuntu
+ * Debian
+ * CentOS
+ * Raspberry PI
+
+Docker images ... 
+
+for GitLab CE and for the GitLab Runner
+
+---
+.head[
+  # Gitlab environment
+  ## Overview
+]
+<img src="overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
+---
+.head[
+  # Gitlab environment
+  ### Setting up the Gitlab Server
+]
+
+  ... install GitLab CE Omnibus package on your server
+
+  ... or sign in at gitlab.com
+
+  ... or run it with docker:
+
+```
+sudo docker run --detach \
+	--hostname gitlab.example.com \
+	--publish 443:443 --publish 80:80 --publish 22:22 \
+	--name gitlab \
+	--restart always \
+	--volume /srv/gitlab/config:/etc/gitlab \
+	--volume /srv/gitlab/logs:/var/log/gitlab \
+	--volume /srv/gitlab/data:/var/opt/gitlab \
+	gitlab/gitlab-ce:latest
+```
+
+---
+.head[
+  # Gitlab environment
+  ### Setting up the Gitlab Server
+]
+
+in the real world you need TLS and stuff:
+
+integrate with load balancer and/or reverse proxy
+
+ * traefik
+ * nginx-proxy
+ * HAproxy
+
+---
+.head[
+  # Setup Gitlab environment
+  ## the Runner
+]
+
+## What is the runner?
+
+A Runner can be a virtual machine, a VPS, a bare-metal machine,
+a docker container or even a cluster of containers.
+
+GitLab and the Runners communicate through an API, so the only requirement is that the Runner’s machine has network access to the GitLab server.
+
+---
+.head[
+  # Setup Gitlab environment
+  ## the Runner
+]
+
+## What is the runner?
+
+
+A runner might be set up to be specific for certain projects, groups or tags.
+
+For example you could have specific "docker runners".
+
+## separated from the GitLab server
+
+High load tasks are separated from the GitLab GUI and logic ... performance high
+
+Runners fetch their jobs and deliver results and (optional) artefacts.
+
+---
+.head[
+  # Setup Gitlab environment
+  ## Register the Runner
+]
+Navigate to "Admin Area (<i class="fa fa-wrench" aria-hidden="true"></i>) / Runner" and copy the registration token.
+
+Start a shell in the `runner` container and execute registration:
+
+```shell
+$ docker-compose exec runner /bin/bash
+root@runner:/# gitlab-runner register
+```
+
+Answer the questions:
+
+ * URL: http://gitlab.example.com:10080/ci
+ * gitlab-ci token: paste your token
+ * Runner description: runner for docker builds
+ * Tags: docker-builder
+ * Executor: docker
+ * default Docker image: docker:1.11.2 (use same version as docker daemon)
+
+Refresh the `Admin Area` page in your browser. It should list you Runner.
+---
+.head[
+  # Setup Gitlab environment
+  ## Setting up the Runner
+]
+Edit the Runners configuration:
+
+```shell
+root@runner:/# vim /etc/gitlab-runner/config.toml
+```
+
+Pass thru the docker socket by adding a volume for it:
+
+```patch
+---    volumes = ["/cache"]
++++    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
+```
+
+## Note: for "docker-in-docker" the docker runners need:
+
+```patch
+--- 
++++    privileged = true
+```
+
+---
+.head[
+  # Setup a Project
+  ## Create the project in gitlab
+]
+Click "New Project" and create a project. (eg. `hello-world`)
+
+Add dockerized (`Dockerfile`) application to the projects git repository.
+
+eg. https://gitlab.com/stefangweichinger/hello-world
+
+```shell
+$ git clone https://gitlab.com/stefangweichinger/hello-world
+$ cd hello-world
+$ git remote remove origin
+$ git remote add origin https://gitlab.com/stefangweichinger/hello-world
+$ git push -u origin master
+```
+
+Reload the project page and check content.
+---
+.head[
+  # CI/CD
+  ## enable CI/CD ... with .gitlab-ci.yml
+]
+The CI is configured by creating a `.gitlab-ci.yml` in the root path of your project:
+
+  ## Add a build job to the CI
+```yaml
+variables:
+  IMAGE_NAME: gitlab:5005/sgw/hello-world
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+
+build_latest:
+  only:
+    - master
+  tags:
+    - docker-builder
+  script:
+    - docker build -t $IMAGE_NAME:latest .
+    - docker push $IMAGE_NAME:latest
+```
+`add`, `commit` and `push` this file to the repository.
+
+Watch the build live on your Gitlab and check the Registry for the built image.
+---
+.head[
+  # Run your Docker Image
+]
+Authenticate to the registry:
+
+```shell
+$ docker login gitlab:5005
+```
+
+Then run your image:
+
+```shell
+$ docker run -p 3000:3000 gitlab:5005/sgw/hello-world:latest
+```
+
+Access the application in your web browser:
+
+http://gitlab:3000
+---
+.head[
+  # Build versioned releases
+]
+If we want to build images for release we could use a second build job:
+
+```yaml
+build_release:
+  only:
+    - /^\d+\.\d+/
+  tags:
+    - docker-builder
+  script:
+    - docker build -t $IMAGE_NAME:$CI_BUILD_REF_NAME .
+    - docker push $IMAGE_NAME:$CI_BUILD_REF_NAME
+```
+
+After `commit` and `push` this change tag a version:
+
+```shell
+$ git tag 1.0
+$ git push --tags
+```
+
+Check the build and registry within Gitlab.
+---
+.head[
+  # that was the easy part
+]
+
+# what else can we do?
+
+* GitLab docker registry: push/pull generated images and 
+* CD: deploy to staging and production, locally or remote
+* environments: integrated way of grouping test and prod instances within the GUI
+
+---
+.head[
+  # best practises
+]
+
+## use variables = avoid hardcoding
+
+gl offers variables for nearly(?) everything
+
+```example
+export CI_JOB_TOKEN="abcde-1234ABCD5678ef"
+export CI_REGISTRY="registry.example.com"
+```
+
+```code
+# .gitlab-ci.yml
+before_script:
+  - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+```
+
+---
+.head[
+  # best practises
+]
+
+## use variables = avoid hardcoding
+
+for example for tagging the docker images:
+
+```example
+export CI_COMMIT_SHA="1ecfd275763eff1d6b4844ea3168962458c9f27a"
+export CI_COMMIT_SHORT_SHA="1ecfd275"
+export CI_COMMIT_REF_NAME="master"
+export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
+export CI_REGISTRY="registry.example.com"
+export CI_REGISTRY_USER="gitlab-ci-token"
+export CI_REGISTRY_PASSWORD="longalfanumstring"
+export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
+```
+
+```code
+# .gitlab-ci.yml
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    # Then we tag it "latest"
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+    # And we push it.
+    - docker push $CI_REGISTRY_IMAGE:latest
+```
+
+---
+.head[
+  # best practises
+]
+
+## use caches
+
+You can define which paths you want to cache for the next stage(s):
+
+```code
+example-job:
+  stage: example
+  script:
+    - npm install
+  cache:
+    paths:
+      - node_modules/
+```
+
+For bigger environments you can run a separate cache server and share cache between multiple runners.
+
+---
+.head[
+  # best practises
+]
+
+## use small docker images
+
+## and cache your docker images
+
+instead of rebuilding everytime from scratch
+
+```code
+docker build --tag $CONTAINER_IMAGE:$CI_BUILD_REF .
+```
+
+you could benefit from the already available docker image layers via
+
+```code
+docker build\
+  --cache-from $CONTAINER_IMAGE:latest\
+  --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
+  --tag $CONTAINER_IMAGE:latest\
+  .
+```
+
+---
+.head[
+  # for runaways
+]
+
+## yaml templates
+
+The .gitlab-ci.yml grows fast and gets complex rather soon.
+To avoid repeating blocks you may use yaml templates, for example
+
+"deploy to production" and "deploy to staging" might only differ in small parts :w
+
+
+```code
+docker build\
+  --cache-from $CONTAINER_IMAGE:latest\
+  --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
+  --tag $CONTAINER_IMAGE:latest\
+  .
+```
+
+---
+class: inverse
+
+# Thanks
+
+For more information please contact:
+
+Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a>&gt;
+---
+.head[
+  # Appendix
+]
+
+Links:
+
+ * [Slides](https://github.com/sgwm/slides-gitlab-ci-docker-builds)
+
+Further readings:
+
+ * [Gitlab - Using Docker Build](http://docs.gitlab.com/ce/ci/docker/using_docker_build.html)
+ * [Gitlab CI - Quickstart](http://docs.gitlab.com/ce/ci/quick_start/README.html)
+ * [Gitlab CI - .gitlab-ci.yml](http://docs.gitlab.com/ce/ci/yaml/README.html)
+
+Find these slides at:
+ * [Online](https://markussgw.de/slides-gitlab-ci-docker-builds/)
+ * [Repository](https://github.com/sgwm/slides-gitlab-ci-docker-builds)
+
+    </textarea>
+    <script src="out/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create( {
+  		  ratio: '4:3', // 16:9
+				highlightStyle: 'monokai'
+			} );
+    </script>
+  </body>
+</html>
