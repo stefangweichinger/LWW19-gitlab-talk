@@ -228,7 +228,7 @@ Basically you might run both the server and the runner on your laptop.red[*]
 
   ... or run it with docker:
 
-```shell
+```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
 	--publish 443:443 --publish 80:80 --publish 22:22 \
@@ -370,19 +370,24 @@ Watch the build live on your GitLab and check the Registry for the built image.
 ]
 Authenticate to the registry:
 
-```shell
+```bash
 $ docker login gitlab:5005
 ```
 
 Then run your image:
 
-```shell
+```bash
 $ docker run -p 3000:3000 gitlab:5005/sgw/hello-world:latest
 ```
 
 Access the application in your web browser:
 
 http://gitlab:3000
+
+???
+
+crux here : ports, IPs, DNS, names, 
+
 ---
 .head[
   # Build versioned releases
@@ -404,7 +409,7 @@ build_release:
 
 After `commit` and `push` this change tag a version:
 
-```shell
+```bash
 $ git tag 1.0
 $ git push --tags
 ```
@@ -445,12 +450,12 @@ some other things:
 .right-column[
 GitLab offers variables for nearly(?) everything
 
-```example
+```bash
 export CI_JOB_TOKEN="abcde-1234ABCD5678ef"
 export CI_REGISTRY="registry.example.com"
 ```
 
-```code
+```yaml
 # .gitlab-ci.yml
 before_script:
   - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
@@ -466,7 +471,7 @@ before_script:
 
 for example for tagging the docker images:
 
-```example
+```bash
 export CI_COMMIT_SHA="1ecfd275763eff1d6b4844ea3168962458c9f27a"
 export CI_COMMIT_SHORT_SHA="1ecfd275"
 export CI_COMMIT_REF_NAME="master"
@@ -477,7 +482,7 @@ export CI_REGISTRY_PASSWORD="longalfanumstring"
 export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
 ```
 
-```code
+```yaml
 # .gitlab-ci.yml
   script:
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
@@ -497,7 +502,7 @@ name: caching
 .right-column[
 You can define which paths you want to cache for the next stage(s):
 
-```code
+```yaml
 example-job:
   stage: example
   script:
@@ -525,7 +530,7 @@ docker build --tag $CONTAINER_IMAGE:$CI_BUILD_REF .
 
 you could benefit from the already available docker image layers via
 
-```code
+```bash
 docker build\
   --cache-from $CONTAINER_IMAGE:latest\
   --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
@@ -550,7 +555,7 @@ To avoid repeating blocks you may use yaml templates, for example:
 
 TODO HERE
 
-```code
+```bash
 docker build\
   --cache-from $CONTAINER_IMAGE:latest\
   --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
