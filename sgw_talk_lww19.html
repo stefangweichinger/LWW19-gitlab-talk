@@ -84,6 +84,8 @@ at #LWW19 LinuxWochenWien 2019
 1. GitLab CI/CD "for runaways"
   1. Build versioned releases
   1. best practises
+1. optional demo
+
 ---
 .head[
   # About GitLab
@@ -150,19 +152,6 @@ sudo docker run --detach \
 ```
 
 or google for a nice docker-compose.yml ...
-
----
-.head[
-  ## GitLab environment :: Proxy
-]
-
-in the real world you need TLS and stuff:
-
-integrate with load balancer and/or reverse proxy
-
- * traefik (see slide below ...)
- * nginx-proxy
- * HAproxy
 
 ---
 .head[
@@ -326,16 +315,23 @@ Check the build and registry within GitLab.
 ---
 class: center, middle, inverse
  # that was the easy part
-]
 ---
 .head[
   ### ... for runaways
 ]
 # what else can we do?
 
-* GitLab docker registry: push/pull generated images
-* CD: deploy to staging and production, locally or remote
-* environments: integrated way of grouping test and prod instances within the GUI
+- you will need routing and SSL/TLS ... something like [traefik](#traefik)
+--
+
+- GitLab docker registry: push/pull generated images
+--
+
+- CD: deploy to staging and production -> [environments](#environments)
+--
+
+- speed up things with [caching](#caching)
+--
 
 ---
 .head[
@@ -388,6 +384,7 @@ export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
 ```
 
 ---
+name: caching
 .head[
   # best practises
 ]
@@ -432,6 +429,7 @@ docker build\
 ```
 
 ---
+name: yaml_templates
 .head[
   ### ... for runaways
 ]
@@ -452,6 +450,7 @@ docker build\
   .
 ```
 ---
+name: environments
 .head[
   ### ... for runaways
 ]
@@ -461,11 +460,25 @@ docker build\
 Environments are like tags for your CI jobs, describing where code gets deployed.
 
 Deployments are created when jobs deploy versions of code to environments, so every environment can have one or more deployments.
-GitLab:
 
 GitLab provides a full history of your deployments for each environment.
 
 GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers
+
+---
+name: demo
+.head[
+  ### a small demo
+]
+
+demo repository at gitlab.com : [hello-world](https://gitlab.com/stefangweichinger/hello-world)
+
+???
+
+small python script
+CI builds docker image, pushes to project repo
+
+
 
 ---
 
@@ -475,7 +488,7 @@ For more information please contact:
 
 Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a>&gt;
 
-# @stefangw 
+# @stefangw
 
 - expert
 - linux servers since the early 90s
@@ -485,9 +498,13 @@ Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a
 .bg[ ![Buster JS](https://www.oops.co.at/css/img/oops-logo.gif) ]
 
 ---
-class: center, middle
+class: center, middle, inverse
 
-# Shameless plug
+one last thing
+
+---
+class: center, middle, inverse
+# please vote
 
 ---
 
@@ -496,17 +513,20 @@ class: center, middle
   # Appendix
 ]
 
-presentation done with [remark](https://github.com/gnab/remark)
+presentation: done with [remark](https://github.com/gnab/remark)
 
-Further readings:
+slides: https://github.com/stefangweichinger/LWW19-gitlab-talk
 
- * [GitLab - Using Docker Build](http://docs.gitlab.com/ce/ci/docker/using_docker_build.html)
- * [GitLab CI - Quickstart](http://docs.gitlab.com/ce/ci/quick_start/README.html)
- * [GitLab CI - .gitlab-ci.yml](http://docs.gitlab.com/ce/ci/yaml/README.html)
+... and maybe someday on https://gitlab.com/stefangweichinger :smirk:
 
-Find these slides at:
- * [Online](https://github.com/stefangweichinger/slides-gitlab-ci-docker-builds/)
- * [Repository](https://github.com/stefangweichinger/slides-gitlab-ci-docker-builds)
+done by Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a>&gt;
+
+for the [LWW19 - LinuxWochenWien](https://linuxwochen.at)
+
+### links
+
+ * consult your local search engine ... hundreds of articles and howtos ...
+
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
