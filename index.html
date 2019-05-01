@@ -173,46 +173,38 @@ at #LWW19 LinuxWochenWien 2019
 
 ---
 .left-column[
-  # About GitLab
-  ## What is GitLab?
+  ## About GitLab
+  ### What is GitLab?
 ]
 .right-column[
 GitLab is an open source end-to-end software development platform with
 
 - built-in version control
---
-
 - issue tracking
---
-
 - code review
---
-
 - CI/CD
---
-
 - ... and much more.
 ]
 
 ---
 .left-column[
-  # About GitLab
-  ## Community or Enterprise?
+  ## About GitLab
+  ### Community or Enterprise?
 ]
 
 .right-column[
 There's a Community Edition (CE) and a Enterprise Edition (EE).
 The EE has some extra features, but the CE is already very complete.
 
-Development of both versions is done in the public:
+Development of both versions is done in the public, for example:
 
 https://gitlab.com/gitlab-org/gitlab-ce/
 
 ]
 ---
 .left-column[
-  # About GitLab
-  ## How?
+  ## About GitLab
+  ### How?
 ]
 .right-column[
 
@@ -230,13 +222,12 @@ Basically you might run both the server and the runner on your laptop.red[*]
 ]
 ---
 .head[
-  # GitLab environment
-  ## Overview
+  ## GitLab environment :: Overview
 ]
 <img src="overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
 ---
 .head[
-  ## GitLab environment :: GitLab Server
+  ### GitLab environment :: GitLab Server
 ]
 
   ... install GitLab CE Omnibus package on your server
@@ -264,37 +255,47 @@ name: runner
 class: center, middle
 # If you don't need CI/CD ... you are done!
 ---
-.head[
-  ## GitLab CI/CD :: the Runner
+.left-column[
+  ### GitLab CI/CD :: the Runner
 ]
 
+.right-column[
 ### What?
 
+A Runner is an instance doing build jobs.
+
+The GitLab CI/CD creates jobs, the runners fetch their jobs and deliver results.
+]
+
+---
+.left-column[
+  ### GitLab CI/CD :: the Runner
+]
+
+.right-column[
+### Where?
 A Runner can be a virtual machine, a VPS, a bare-metal machine,
 a docker container or even a cluster of containers.
 
----
-.head[
-  ## GitLab environment :: the Runner
-]
-
-### Where?
+### How?
 A runner might be set up to be specific for certain projects, groups or tags.
 
 In general you deploy the runner(s) separated from the GitLab server itself:
 High load tasks are separated from the GitLab GUI and logic ... performance high
 
-Runners fetch their jobs and deliver results and (optional) artefacts.
+]
 
 ???
 
 runners are separate workhorses
 http API between gitlab server and runners
-
+Shared runners vs. private or project runners
 ---
-.head[
-  ## GitLab environment :: Register the Runner
+.left-column[
+  ### GitLab CI/CD :: register the Runner
 ]
+
+.right-column[
 Navigate to "Admin Area (<i class="fa fa-wrench" aria-hidden="true"></i>) / Runner" and copy the registration token.
 
 Start a shell in the `runner` container and execute registration:
@@ -314,10 +315,12 @@ Answer the questions:
  * default Docker image: docker:1.11.2 (use same version as docker daemon)
 
 Refresh the `Admin Area` page in your browser. It should list you Runner.
----
-.head[
-  ## GitLab environment :: Configure the Runner
 ]
+---
+.left-column[
+  ### GitLab CI/CD :: configure the Runner
+]
+.right-column[
 Edit the Runners configuration:
 
 ```shell
@@ -331,7 +334,7 @@ Access the docker.socket within the runner-container:
 +++    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
 ```
 
-### Note: for "docker-in-docker" the docker runners need:
+special hint: for "docker-in-docker" the docker runners need:
 
 ```patch
 ---
@@ -339,6 +342,7 @@ Access the docker.socket within the runner-container:
 ```
 
 Dozens of options here, for example DNS servers ...
+]
 
 ---
 .head[
