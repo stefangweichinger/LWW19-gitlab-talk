@@ -35,7 +35,7 @@
       vertical-align: middle;
       text-align: left;
       }
-.inverse {
+      .inverse {
         background: #272822;
         color: #777872;
         text-shadow: 0 0 20px #333;
@@ -109,6 +109,23 @@
         float: right;
         padding-top: 1em;
       }
+
+	  .pull-left {
+		  float: left;
+		  width: 47%;
+	  }
+	  .pull-right {
+		  float: right;
+		  width: 47%;
+	  }
+	  .pull-right ~ p {
+		  clear: both;
+	  }
+				  }
+			}
+	  }
+
+
   </style>
 </head>
 <body>
@@ -317,7 +334,7 @@ Access the docker.socket within the runner-container:
 ### Note: for "docker-in-docker" the docker runners need:
 
 ```patch
---- 
+---
 +++    privileged = true
 ```
 
@@ -389,35 +406,48 @@ http://gitlab:3000
 crux here : ports, IPs, DNS, names, 
 
 ---
-.head[
-  # Build versioned releases
-]
-If we want to build images for release we could use a second build job:
-
-TODO HERE
-
-```yaml
-build_release:
-  only:
-    - /^\d+\.\d+/
-  tags:
-    - docker-builder
-  script:
-    - docker build -t $IMAGE_NAME:$CI_BUILD_REF_NAME .
-    - docker push $IMAGE_NAME:$CI_BUILD_REF_NAME
-```
-
-After `commit` and `push` this change tag a version:
-
-```bash
-$ git tag 1.0
-$ git push --tags
-```
-
-Check the build and registry within GitLab.
----
 class: center, middle, inverse
  # that was the easy part
+---
+.head[
+  ## .gitlab-ci.yml :: more details
+]
+
+```yaml
+image: docker:18
+
+services:
+- docker:dind
+
+before_script:
+  - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+
+stages:
+  - test
+  - build
+
+test:
+  image: python:3-alpine
+  stage: test
+  before_script:
+    - ''
+  script:
+    - pip install pytest
+    - pip install -r requirements.txt
+    - pytest --version
+    - pytest helloworld.py
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - > docker build --pull --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+```
 ---
 <!--layout: false-->
 .left-column[
@@ -428,16 +458,9 @@ class: center, middle, inverse
 some other things:
 
 - you will need routing and SSL/TLS ... something like [traefik](#traefik)
---
-
 - GitLab docker registry: push/pull generated images
---
-
 - CD: deploy to staging and production : use [environments](#environments)
---
-
 - speed up things with [caching](#caching)
---
 ]
 
 ---
@@ -445,7 +468,6 @@ some other things:
   ### best practises
   #### use variables = avoid hardcoding
 ]
-
 
 .right-column[
 GitLab offers variables for nearly(?) everything
@@ -468,7 +490,6 @@ before_script:
 ]
 
 .right-column[
-
 for example for tagging the docker images:
 
 ```bash
@@ -495,8 +516,8 @@ export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
 ---
 name: caching
 .left-column[
-  ## best practises
-  ### use caches
+  ### best practises
+  #### use caches
 ]
 
 .right-column[
@@ -517,8 +538,8 @@ For bigger environments you can run a separate cache server and share cache betw
 
 ---
 .left-column[
-  ## best practises
-  ### use small docker images ... and cache them
+  ### best practises
+  #### use small docker images ... and cache them
 ]
 
 .right-column[
@@ -542,8 +563,8 @@ docker build\
 ---
 name: yaml_templates
 .left-column[
-  ## best practises
-  ### yaml templates
+  ### best practises
+  #### yaml templates
 ]
 
 .right-column[
@@ -551,23 +572,59 @@ name: yaml_templates
 
 To avoid repeating blocks you may use yaml templates, for example:
 
-"deploy to production" and "deploy to staging" might only differ in small parts
+.pull-left[
 
-TODO HERE
+```yaml
+.job_template: &job_definition
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
 
-```bash
-docker build\
-  --cache-from $CONTAINER_IMAGE:latest\
-  --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
-  --tag $CONTAINER_IMAGE:latest\
-  .
+test1:
+  <<: *job_definition
+  script:
+    - test1 project
+
+test2:
+  <<: *job_definition
+  script:
+    - test2 project
 ```
+]
+.pull-right[
+
+```yaml
+.job_template:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+
+test1:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+  script:
+    - test1 project
+
+test2:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+  script:
+    - test2 project
+```
+]
+
 ]
 ---
 name: environments
 .left-column[
-  ## best practises
-  ### environments
+  ### best practises
+  #### environments
 ]
 
 .right-column[
@@ -583,7 +640,7 @@ GitLab keeps track of your deployments, so you always know what is currently bei
 ---
 name: demo
 .head[
-  ### a small demo
+  ## a small demo
 ]
 
 demo repository at gitlab.com : [hello-world](https://gitlab.com/stefangweichinger/hello-world)
