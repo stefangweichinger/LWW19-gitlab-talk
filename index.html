@@ -3,15 +3,19 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>the pipeline</title>
     <style>
-     @import url(https://fonts.googleapis.com/css?family=Lobster);
-     @import url(https://fonts.googleapis.com/css?family=IBM+Plex+Mono);
-     @import url(https://fonts.googleapis.com/css?family=IBM+Plex+Serif);
+     @import url(http://fonts.googleapis.com/css?family=Lobster);
+     @import url(http://fonts.googleapis.com/css?family=IBM+Plex+Mono);
+     @import url(http://fonts.googleapis.com/css?family=IBM+Plex+Serif);
 
       body { font-family: 'IBM Plex Serif'; }
       h1, h2, h3 {
           font-family: 'Lobster';
           font-weight: normal;
+          margin-bottom: 0;
       }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
       a {
           background-color: #fafa00;
           color: #000;
@@ -31,16 +35,97 @@
       vertical-align: middle;
       text-align: left;
       }
-      .inverse .remark-slide-number {
-          display: none;
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
       }
 
-      .red {
-          color: #fa0000;
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
       }
       .remark-code, .remark-inline-code {
           font-family: 'IBM Plex Mono';
         font-size: 0.7em; }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 15%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 80%;
+        float: right;
+        padding-top: 1em;
+      }
+
+	  .pull-left {
+		  float: left;
+		  width: 47%;
+	  }
+	  .pull-right {
+		  float: right;
+		  width: 47%;
+	  }
+	  .pull-right ~ p {
+		  clear: both;
+	  }
+				  }
+			}
+	  }
+
+
   </style>
 </head>
 <body>
@@ -87,50 +172,62 @@ at #LWW19 LinuxWochenWien 2019
 1. optional demo
 
 ---
-.head[
-  # About GitLab
-  ## What is GitLab?
+.left-column[
+  ## About GitLab
+  ### What is GitLab?
 ]
-GitLab is:
+.right-column[
+GitLab is an open source end-to-end software development platform with
 
-GitLab is an open source end-to-end software development platform with 
-
- * built-in version control
- * issue tracking
- * code review
- * CI/CD
- * ... and more.
+- built-in version control
+- issue tracking
+- code review
+- CI/CD
+- ... and much more.
+]
 
 ---
-.head[
-  # About GitLab
-  ## Community or Enterprise?
+.left-column[
+  ## About GitLab
+  ### Community or Enterprise?
 ]
 
+.right-column[
 There's a Community Edition (CE) and a Enterprise Edition (EE).
 The EE has some extra features, but the CE is already very complete.
 
-Development of both versions is done in the public.
----
-.head[
-  # About GitLab
-  ## Installation options
+Development of both versions is done in the public, for example:
+
+https://gitlab.com/gitlab-org/gitlab-ce/
+
 ]
+---
+.left-column[
+  ## About GitLab
+  ### How?
+]
+.right-column[
 
- * Packages for common Linux distributions.
- * Docker images ... for GitLab CE and for the GitLab Runner.
+- use it at https://gitlab.com (and pay for it)
+- or look for a hoster
+- or install it on your own systems:
 
- Basically you might run both the server and the runner on your laptop!
+    - Packages for common Linux distributions.
+    - Docker images ... for GitLab CE and for the GitLab Runner.
 
+Basically you might run both the server and the runner on your laptop.red[*]
+
+.footnote[.red[*] ... a bit tricky, though ... DNS etc
+]
+]
 ---
 .head[
-  # GitLab environment
-  ## Overview
+  ## GitLab environment :: Overview
 ]
 <img src="overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
 ---
 .head[
-  ## GitLab environment :: GitLab Server
+  ### GitLab environment :: GitLab Server
 ]
 
   ... install GitLab CE Omnibus package on your server
@@ -139,7 +236,7 @@ Development of both versions is done in the public.
 
   ... or run it with docker:
 
-```shell
+```bash
 sudo docker run --detach \
 	--hostname gitlab.example.com \
 	--publish 443:443 --publish 80:80 --publish 22:22 \
@@ -154,34 +251,51 @@ sudo docker run --detach \
 or google for a nice docker-compose.yml ...
 
 ---
-.head[
-  ## GitLab environment :: the Runner
+name: runner
+class: center, middle
+# If you don't need CI/CD ... you are done!
+---
+.left-column[
+  ### GitLab CI/CD :: the Runner
 ]
 
+.right-column[
 ### What?
 
+A Runner is an instance doing build jobs.
+
+The GitLab CI/CD creates jobs, the runners fetch their jobs and deliver results.
+]
+
+---
+.left-column[
+  ### GitLab CI/CD :: the Runner
+]
+
+.right-column[
+### Where?
 A Runner can be a virtual machine, a VPS, a bare-metal machine,
 a docker container or even a cluster of containers.
 
----
-.head[
-  ## GitLab environment :: the Runner
-]
-
-### Where?
+### How?
 A runner might be set up to be specific for certain projects, groups or tags.
-
-For example you could have specific "docker runners".
 
 In general you deploy the runner(s) separated from the GitLab server itself:
 High load tasks are separated from the GitLab GUI and logic ... performance high
 
-Runners fetch their jobs and deliver results and (optional) artefacts.
-
----
-.head[
-  ## GitLab environment :: Register the Runner
 ]
+
+???
+
+runners are separate workhorses
+http API between gitlab server and runners
+Shared runners vs. private or project runners
+---
+.left-column[
+  ### GitLab CI/CD :: register the Runner
+]
+
+.right-column[
 Navigate to "Admin Area (<i class="fa fa-wrench" aria-hidden="true"></i>) / Runner" and copy the registration token.
 
 Start a shell in the `runner` container and execute registration:
@@ -201,10 +315,12 @@ Answer the questions:
  * default Docker image: docker:1.11.2 (use same version as docker daemon)
 
 Refresh the `Admin Area` page in your browser. It should list you Runner.
----
-.head[
-  ## GitLab environment :: Configure the Runner
 ]
+---
+.left-column[
+  ### GitLab CI/CD :: configure the Runner
+]
+.right-column[
 Edit the Runners configuration:
 
 ```shell
@@ -218,14 +334,15 @@ Access the docker.socket within the runner-container:
 +++    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
 ```
 
-### Note: for "docker-in-docker" the docker runners need:
+special hint: for "docker-in-docker" the docker runners need:
 
 ```patch
---- 
+---
 +++    privileged = true
 ```
 
 Dozens of options here, for example DNS servers ...
+]
 
 ---
 .head[
@@ -274,95 +391,112 @@ Watch the build live on your GitLab and check the Registry for the built image.
 ]
 Authenticate to the registry:
 
-```shell
+```bash
 $ docker login gitlab:5005
 ```
 
 Then run your image:
 
-```shell
+```bash
 $ docker run -p 3000:3000 gitlab:5005/sgw/hello-world:latest
 ```
 
 Access the application in your web browser:
 
 http://gitlab:3000
----
-.head[
-  # Build versioned releases
-]
-If we want to build images for release we could use a second build job:
 
-```yaml
-build_release:
-  only:
-    - /^\d+\.\d+/
-  tags:
-    - docker-builder
-  script:
-    - docker build -t $IMAGE_NAME:$CI_BUILD_REF_NAME .
-    - docker push $IMAGE_NAME:$CI_BUILD_REF_NAME
-```
+???
 
-After `commit` and `push` this change tag a version:
+crux here : ports, IPs, DNS, names, 
 
-```shell
-$ git tag 1.0
-$ git push --tags
-```
-
-Check the build and registry within GitLab.
 ---
 class: center, middle, inverse
  # that was the easy part
 ---
 .head[
-  ### ... for runaways
+  ## .gitlab-ci.yml :: more details
 ]
-# what else can we do?
+
+```yaml
+image: docker:18
+
+services:
+- docker:dind
+
+before_script:
+  - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+
+stages:
+  - test
+  - build
+
+test:
+  image: python:3-alpine
+  stage: test
+  before_script:
+    - ''
+  script:
+    - pip install pytest
+    - pip install -r requirements.txt
+    - pytest --version
+    - pytest helloworld.py
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - > docker build --pull --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+```
+---
+<!--layout: false-->
+.left-column[
+### ... for the runaways
+]
+
+.right-column[
+some other things:
 
 - you will need routing and SSL/TLS ... something like [traefik](#traefik)
---
-
 - GitLab docker registry: push/pull generated images
---
-
-- CD: deploy to staging and production -> [environments](#environments)
---
-
+- CD: deploy to staging and production : use [environments](#environments)
 - speed up things with [caching](#caching)
---
-
----
-.head[
-  # best practises
 ]
 
-## use variables = avoid hardcoding
+---
+.left-column[
+  ### best practises
+  #### use variables = avoid hardcoding
+]
 
-gl offers variables for nearly(?) everything
+.right-column[
+GitLab offers variables for nearly(?) everything
 
-```example
+```bash
 export CI_JOB_TOKEN="abcde-1234ABCD5678ef"
 export CI_REGISTRY="registry.example.com"
 ```
 
-```code
+```yaml
 # .gitlab-ci.yml
 before_script:
   - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
 ```
-
+]
 ---
-.head[
-  # best practises
+.left-column[
+  ### best practises
+  #### use variables = avoid hardcoding
 ]
 
-## use variables = avoid hardcoding
-
+.right-column[
 for example for tagging the docker images:
 
-```example
+```bash
 export CI_COMMIT_SHA="1ecfd275763eff1d6b4844ea3168962458c9f27a"
 export CI_COMMIT_SHORT_SHA="1ecfd275"
 export CI_COMMIT_REF_NAME="master"
@@ -373,7 +507,7 @@ export CI_REGISTRY_PASSWORD="longalfanumstring"
 export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
 ```
 
-```code
+```yaml
 # .gitlab-ci.yml
   script:
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
@@ -382,18 +516,18 @@ export CI_REGISTRY_IMAGE="registry.example.com/gitlab-org/gitlab-ce"
     # And we push it.
     - docker push $CI_REGISTRY_IMAGE:latest
 ```
-
+]
 ---
 name: caching
-.head[
-  # best practises
+.left-column[
+  ### best practises
+  #### use caches
 ]
 
-## use caches
-
+.right-column[
 You can define which paths you want to cache for the next stage(s):
 
-```code
+```yaml
 example-job:
   stage: example
   script:
@@ -404,14 +538,15 @@ example-job:
 ```
 
 For bigger environments you can run a separate cache server and share cache between multiple runners.
-
----
-.head[
-  # best practises
 ]
 
-### use small docker images ... and cache them
+---
+.left-column[
+  ### best practises
+  #### use small docker images ... and cache them
+]
 
+.right-column[
 instead of rebuilding everytime from scratch
 
 ```code
@@ -420,55 +555,96 @@ docker build --tag $CONTAINER_IMAGE:$CI_BUILD_REF .
 
 you could benefit from the already available docker image layers via
 
-```code
+```bash
 docker build\
   --cache-from $CONTAINER_IMAGE:latest\
   --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
   --tag $CONTAINER_IMAGE:latest\
   .
 ```
+]
 
 ---
 name: yaml_templates
-.head[
-  ### ... for runaways
+.left-column[
+  ### best practises
+  #### yaml templates
 ]
 
-## yaml templates
-
+.right-column[
 `.gitlab-ci.yml` grows fast and gets complex rather soon.
 
 To avoid repeating blocks you may use yaml templates, for example:
 
-"deploy to production" and "deploy to staging" might only differ in small parts
+.pull-left[
 
-```code
-docker build\
-  --cache-from $CONTAINER_IMAGE:latest\
-  --tag $CONTAINER_IMAGE:$CI_BUILD_REF\
-  --tag $CONTAINER_IMAGE:latest\
-  .
+```yaml
+.job_template: &job_definition
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+
+test1:
+  <<: *job_definition
+  script:
+    - test1 project
+
+test2:
+  <<: *job_definition
+  script:
+    - test2 project
 ```
----
-name: environments
-.head[
-  ### ... for runaways
+]
+.pull-right[
+
+```yaml
+.job_template:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+
+test1:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+  script:
+    - test1 project
+
+test2:
+  image: ruby:2.1
+  services:
+    - postgres
+    - redis
+  script:
+    - test2 project
+```
 ]
 
-## environments
+]
+---
+name: environments
+.left-column[
+  ### best practises
+  #### environments
+]
 
-Environments are like tags for your CI jobs, describing where code gets deployed.
+.right-column[
+*Environments* are like tags for your CI jobs, describing where code gets deployed.
 
 Deployments are created when jobs deploy versions of code to environments, so every environment can have one or more deployments.
 
 GitLab provides a full history of your deployments for each environment.
 
-GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers
+GitLab keeps track of your deployments, so you always know what is currently being deployed on your servers.
+]
 
 ---
 name: demo
 .head[
-  ### a small demo
+  ## a small demo
 ]
 
 demo repository at gitlab.com : [hello-world](https://gitlab.com/stefangweichinger/hello-world)
@@ -478,42 +654,49 @@ demo repository at gitlab.com : [hello-world](https://gitlab.com/stefangweiching
 small python script
 CI builds docker image, pushes to project repo
 
-
+2 environments
 
 ---
 
-# Thanks
+# Thanks!
 
 For more information please contact:
 
 Stefan G. Weichinger &lt;<a href="mailto:office@oops.co.at">office@oops.co.at</a>&gt;
 
-# @stefangw
+# `@stefangw`
 
 - expert
 - linux servers since the early 90s
 - giving talks, writing for magazines, books ...
-- always looking for paid work
+- always looking for well-paid work
 
 .bg[ ![Buster JS](https://www.oops.co.at/css/img/oops-logo.gif) ]
 
 ---
 class: center, middle, inverse
 
-one last thing
+one last thing ...
 
 ---
 class: center, middle, inverse
 # please vote
+## European elections on May, 26th :: important!
 
 ---
 
 ---
-.head[
-  # Appendix
+.left-column[
+  ## appendix
+  ### credits
 ]
 
+.right-column[
 presentation: done with [remark](https://github.com/gnab/remark)
+
+watch: https://lww19.xunil.at
+
+watch: https://stefangweichinger.github.io/LWW19-gitlab-talk/#1
 
 slides: https://github.com/stefangweichinger/LWW19-gitlab-talk
 
@@ -526,13 +709,25 @@ for the [LWW19 - LinuxWochenWien](https://linuxwochen.at)
 ### links
 
  * consult your local search engine ... hundreds of articles and howtos ...
+]
+---
+name: last-page
+class: center, middle, inverse
 
+## That's all, folks!
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
-    </script>
     <script>
-      var slideshow = remark.create();
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark.language.js"></script>
+    <script>
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark',
+          highlightLines: true
+        }) ;
     </script>
   </body>
 </html>
