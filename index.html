@@ -193,24 +193,6 @@ class: center, middle
 LinuxWochenWien .created-on[2019-05-02]
 
 ---
-## about me
-
-#Stefan Gregor Weichinger
-## expert
---
-
-- linux servers since the early 90s
---
-
-- giving talks, writing for magazines, books ...
---
-
-- ansible, samba, postfix, debian, gentoo, docker, vmware, backups, networks, pfsense ...
-
-always looking for well-paid work :: https://www.oops.co.at
-
-.bg[ ![Buster JS](https://www.oops.co.at/css/img/oops-logo.gif) ]
----
 .head[
   # Agenda
 ]
@@ -248,6 +230,20 @@ GitLab is an open source end-to-end software development platform with
 <img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 290px; left: 50;" />
 
 ]
+
+???
+
+who uses
+
+gitlab ee
+
+ce
+
+ci/cd
+
+docker
+
+
 
 ---
 .left-column[
@@ -387,7 +383,10 @@ Answer the questions:
  * Runner description: runner for docker builds
  * Tags: docker-builder
  * Executor: docker
- * default Docker image: docker:1.11.2 (use same version as docker daemon)
+ * default Docker image: docker:1.x.y .red[*]
+
+.footnote[.red[*] it might be clever use same version as docker daemon
+]
 
 Refresh the `Admin Area` page in your browser. 
 It should list your Runner now!
