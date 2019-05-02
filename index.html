@@ -231,6 +231,20 @@ GitLab is an open source end-to-end software development platform with
 
 ]
 
+???
+
+who uses
+
+gitlab ee
+
+ce
+
+ci/cd
+
+docker
+
+
+
 ---
 .left-column[
   ## About GitLab
@@ -369,7 +383,10 @@ Answer the questions:
  * Runner description: runner for docker builds
  * Tags: docker-builder
  * Executor: docker
- * default Docker image: docker:1.11.2 (use same version as docker daemon)
+ * default Docker image: docker:1.x.y .red[*]
+
+.footnote[.red[*] it might be clever use same version as docker daemon
+]
 
 Refresh the `Admin Area` page in your browser. 
 It should list your Runner now!
