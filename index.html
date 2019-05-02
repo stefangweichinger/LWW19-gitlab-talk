@@ -44,6 +44,12 @@
         color: #f3f3f3;
         line-height: 0.8em;
       }
+      <!--.title-slide .remark-slide-number {-->
+  <!--display: none;-->
+      <!--}-->
+      .remark-slide-number {
+        display: none;
+      }
       /* Slide-specific styling */
       #slide-inverse .footnote {
         bottom: 12px;
@@ -167,7 +173,8 @@ class: center, middle, inverse
 
 # the pipeline
 
-## CI/CD with GitLab
+## CI/CD with
+<img src="https://about.gitlab.com/images/press/logo/png/gitlab-logo-1-color-white-rgb.png" width="25%" style="position: middle; top: 100px; left: 450;" />
 
 .footnote[Stefan G. Weichinger, oops linux, 2019]
 
@@ -175,15 +182,16 @@ class: center, middle, inverse
 class: center, middle
 # Intro
 ---
-
-<img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 100px; left: 450;" />
+class: center, middle
 # the pipeline
-## CI/CD in GitLab (CE)
+
+## CI/CD with
+<img src="https://about.gitlab.com/images/press/logo/png/gitlab-logo-1-color-black-rgb.png" width="25%" style="position: middle; top: 100px; left: 450;" />
+
 ### an overview by Stefan G. Weichinger
 
-at #LWW19 LinuxWochenWien 2019
+LinuxWochenWien .created-on[2019-05-02]
 
-.created-on[2019-05-02]
 ---
 .head[
   # Agenda
@@ -219,7 +227,7 @@ GitLab is an open source end-to-end software development platform with
 - CI/CD
 - ... and much more.
 
-<img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 240px; left: 50;" />
+<img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 290px; left: 50;" />
 
 ]
 
@@ -259,11 +267,6 @@ Basically you might run both the server and the runner on your laptop.red[*]
 ]
 ---
 .head[
-  ## GitLab environment :: Overview
-]
-<img src="./img/overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
----
-.head[
   ### GitLab environment :: GitLab Server
 ]
 
@@ -292,6 +295,23 @@ name: runner
 class: center, middle
 # If you don't need CI/CD ... you are done!
 ---
+.head[
+  ## GitLab CI/CD :: overview
+]
+<img src="https://docs.gitlab.com/ee/ci/introduction/img/gitlab_workflow_example_11_9.png" width="90%" style="position: middle;" />
+---
+.head[
+  ## CI/CD :: Pipeline
+]
+
+<img src="https://about.gitlab.com/images/press/screenshots/pipeline-graph.png" width="90%" style="position: middle;" />
+
+???
+A pipeline consists of
+
+- stages
+- jobs
+
 .left-column[
   ### GitLab CI/CD :: the Runner
 ]
