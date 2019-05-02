@@ -125,11 +125,44 @@
 			}
 	  }
 
+/* Header/Footer stuff */
+div.my-header {
+    background-color: #F77A00;
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ffb76b), color-stop(0%,#ffa73d), color-stop(0%,#ffffff), color-stop(10%,#ffffff), color-stop(25%,#F77A00), color-stop(100%,#F77A00));
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 30px;
+    width: 100%;
+    text-align: left;
+}
+
+div.my-footer {
+    background-color: #F77A00;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 20px;
+    width: 100%;
+}
+
+div.my-footer span {
+    font-size: 10pt;
+    position: absolute;
+    left: 15px;
+    bottom: 2px;
+}
 
   </style>
 </head>
 <body>
   <textarea id="source">
+layout: true
+<div class="my-header"><img src="https://www.oops.co.at/css/img/oops-logo.gif" style="height: 30px;"/></div>
+
+<div class="my-footer"><span>&copy; Stefan G. Weichinger, oops! :: 2019 </span><img src="https://www.oops.co.at/css/img/oops-logo.gif" style="height: 30px;"/></div>
+
+---
 class: center, middle, inverse
 
 # the pipeline
@@ -143,6 +176,7 @@ class: center, middle
 # Intro
 ---
 
+<img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 100px; left: 450;" />
 # the pipeline
 ## CI/CD in GitLab (CE)
 ### an overview by Stefan G. Weichinger
@@ -184,6 +218,9 @@ GitLab is an open source end-to-end software development platform with
 - code review
 - CI/CD
 - ... and much more.
+
+<img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-gray-rgb.jpg" width="25%" style="position: fixed; top: 240px; left: 50;" />
+
 ]
 
 ---
@@ -224,7 +261,7 @@ Basically you might run both the server and the runner on your laptop.red[*]
 .head[
   ## GitLab environment :: Overview
 ]
-<img src="overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
+<img src="./img/overview.svg" width="95%" style="position: fixed; top: 70px; left: 0;" />
 ---
 .head[
   ### GitLab environment :: GitLab Server
@@ -314,7 +351,8 @@ Answer the questions:
  * Executor: docker
  * default Docker image: docker:1.11.2 (use same version as docker daemon)
 
-Refresh the `Admin Area` page in your browser. It should list you Runner.
+Refresh the `Admin Area` page in your browser. 
+It should list your Runner now!
 ]
 ---
 .left-column[
@@ -642,6 +680,15 @@ GitLab keeps track of your deployments, so you always know what is currently bei
 ]
 
 ---
+name: traefik
+.left-column[
+  ### best practises :: reverse proxy :: traefik
+]
+
+.right-column[
+<img src="https://docs.traefik.io/img/internal.png" width="75%" style="position: fixed; top: 160px; left: 150;" />
+]
+---
 name: demo
 .head[
   ## a small demo
@@ -692,11 +739,13 @@ class: center, middle, inverse
 ]
 
 .right-column[
-presentation: done with [remark](https://github.com/gnab/remark)
+### presentation
 
-watch: https://lww19.xunil.at
+done with [remark](https://github.com/gnab/remark)
 
-watch: https://stefangweichinger.github.io/LWW19-gitlab-talk/#1
+watch @GitHub :: http://lww19.xunil.at
+
+or https://stefangweichinger.github.io/LWW19-gitlab-talk/#1
 
 slides: https://github.com/stefangweichinger/LWW19-gitlab-talk
 
