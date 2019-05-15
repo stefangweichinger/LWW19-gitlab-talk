@@ -308,6 +308,24 @@ or google for a nice docker-compose.yml ...
 name: runner
 class: center, middle
 # If you don't need CI/CD ... you are done!
+
+---
+name: cicd
+class: center, middle
+# What is CI/CD?
+---
+.head[
+  ## CI/CD :: definition
+]
+
+"(in software engineering) continuous integration (CI) is the practice of merging all developer working copies to a shared mainline several times a day." .red[*]
+
+.footnote[.red[*] wikipedia
+]
+
+<img src="https://about.gitlab.com/images/blogimages/cicd_pipeline_infograph.png" width="90%" style="position: middle;" />
+
+
 ---
 .head[
   ## GitLab CI/CD :: overview
@@ -344,15 +362,15 @@ The GitLab CI/CD creates jobs, the runners fetch their jobs and deliver results.
 ]
 
 .right-column[
-### Where?
+#### Where?
 A Runner can be a virtual machine, a VPS, a bare-metal machine,
 a docker container or even a cluster of containers.
 
-### How?
+#### How?
 A runner might be set up to be specific for certain projects, groups or tags.
+And it is running on a separate machine, not on the GitLab Server.
 
-In general you deploy the runner(s) separated from the GitLab server itself:
-High load tasks are separated from the GitLab GUI and logic ... performance high
+<img src="https://about.gitlab.com/images/ci/ci-cd-architecture_2x.png" width="70%" style="position: middle;" />
 
 ]
 
